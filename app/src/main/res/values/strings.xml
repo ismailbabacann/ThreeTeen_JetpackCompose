@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">zarOyunu</string>
+    <string name="roll">Zarı At</string>
+    <string name="baslık">Threeteen</string>
+    <string name="oyunaBasla">Oyuna Başla!</string>
+    <string name="oyunKuralları">Oyun Kuralları</string>
+    <string name="BackTo">Ana Menü</string>
+</resources>
