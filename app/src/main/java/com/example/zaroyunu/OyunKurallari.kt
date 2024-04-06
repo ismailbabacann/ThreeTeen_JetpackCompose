@@ -42,12 +42,10 @@ fun OyunKurallari(navController: NavController) {
             .size(150.dp)
             .background(Color.Yellow)
             .align(Alignment.CenterHorizontally)
-
-
         Image(
             painter = painterResource(R.drawable._593240364_2),
             contentDescription = "1",
-            modifier = imageModifier,
+            modifier = imageModifier
         )
         Spacer(modifier = Modifier.height(50.dp))
         Surface(color = Color.White, modifier = Modifier.fillMaxWidth()) {
@@ -60,7 +58,7 @@ fun OyunKurallari(navController: NavController) {
                     "eğer 13'ü geçerseniz kaybedersiniz, 13 ün altında kalırsanız sonraki zar atışını sistem yapar sistem atışı 13'ü geçerse kazanırsınız geçmezse kaybedersiniz. "
         )
         Spacer(modifier = Modifier.height(50.dp))
-        Button(onClick = {navController.navigate("Anasayfa")}, colors = ButtonDefaults.buttonColors(containerColor = Color.Black ) ) {
+        Button(onClick = {navController.navigate("LogicSayfasi")}, colors = ButtonDefaults.buttonColors(containerColor = Color.Black ) ) {
             Text(stringResource(R.string.BackTo))
         }
     }

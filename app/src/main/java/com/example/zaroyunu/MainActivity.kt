@@ -1,5 +1,6 @@
 package com.example.zaroyunu
 
+import LogicSayfasi
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -74,11 +75,20 @@ fun SayfaGecisleri() {
         composable("Anasayfa") {
             Anasayfa(navController)
         }
+        composable("LogicSayfasi") {
+            LogicSayfasi(navController)
+        }
         composable("OyunSayfasi") {
             OyunSayfasi(navController)
         }
         composable("OyunKurallari") {
             OyunKurallari(navController)
+        }
+        composable("sonucEkrani/{sonuc}" , arguments = listOf(
+            navArgument("sonuc"){type= NavType.BoolType}
+        )){
+            val sonuc = it.arguments?.getBoolean("sonuc")!!
+            SonucEkrani(navController , sonuc)
         }
     }
 }

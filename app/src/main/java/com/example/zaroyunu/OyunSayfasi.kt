@@ -1,5 +1,6 @@
 package com.example.zaroyunu
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,14 +9,30 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.zaroyunu.ui.theme.DiceRollerTheme
+import kotlinx.coroutines.launch
 
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -41,19 +59,15 @@ fun GreetingPreview2() {
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OyunSayfasi(navController: NavController) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        Surface(color = Color.White, modifier = Modifier.fillMaxWidth()) {
-            Text(text = "ThreeTeen", fontSize = 36.sp, textAlign = TextAlign.Center)
-        }
-    }
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
     var result by remember { mutableStateOf(0) }
     var toplamSayi by remember { mutableStateOf(0) }
+    var basmaSayisi by remember { mutableStateOf(0) }
     val imageResource = when (result) {
         1 -> R.drawable.dice_1
         2 -> R.drawable.dice_2
@@ -63,26 +77,81 @@ fun OyunSayfasi(navController: NavController) {
         else -> R.drawable.dice_6
     }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(modifier = Modifier.height(150.dp))
+    Column (horizontalAlignment = Alignment.CenterHorizontally) {
+        Spacer(modifier = Modifier.height(128.dp))
         Text(text = "Gelen Sayı : ${result}")
         Image(
             painter = painterResource(imageResource), contentDescription = "1"
         )
         Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = {
-            result = (1..6).random()
-            toplamSayi += result
-        }, colors = ButtonDefaults.buttonColors(containerColor = Color.Black)) {
-
-            Text(stringResource(R.string.roll))
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
+            },
+            floatingActionButtonPosition = FabPosition.Center,
+            floatingActionButton = {
+                ExtendedFloatingActionButton(
+                    text = { Text("Zar At") },
+                    icon = { Icon(Icons.Filled.AddCircle, contentDescription = "") },
+                    onClick = {
+                        result = (1..6).random()
+                        toplamSayi += result
+                        basmaSayisi++
+                        if (basmaSayisi == 3)
+                            scope.launch {
+                                val newResult = snackbarHostState
+                                    .showSnackbar(
+                                        message = "Son atışı sistem yapacak. Sistemin atışıyıla beraber 13 ya da az olursa kaybedersin,13'ü geçerse kazanırsın",
+                                        actionLabel = "TAMAM",
+                                        // Defaults to SnackbarDuration.Short
+                                        duration = SnackbarDuration.Indefinite
+                                    )
+                                when (newResult) {
+                                    SnackbarResult.ActionPerformed -> {
+                                        result = (1..6).random()
+                                        toplamSayi += result
+                                        if (toplamSayi >= 14 ) {
+                                            navController.navigate("SonucEkrani/true")
+                                        } else {
+                                            navController.navigate("SonucEkrani/false")
+                                        }
+                                    }
+                                    SnackbarResult.Dismissed -> {
+                                        if (toplamSayi == 13) {
+                                            navController.navigate("SonucEkrani/true")
+                                        } else {
+                                            navController.navigate("SonucEkrani/false")
+                                        }
+                                    }
+                                }
+                            }
+                    }
+                )
+            }
+        ) {
+            Spacer(modifier = Modifier.height(10.dp))
         }
+        /*Button(onClick = {
+                    result = (1..6).random()
+                    toplamSayi += result
+                    basmaSayisi++
+                    if (basmaSayisi == 3)
+                        if (toplamSayi == 13) {
+                            navController.navigate("SonucEkrani/true")
+                        } else {
+                            navController.navigate("SonucEkrani/false")
+                        }
+                }, colors = ButtonDefaults.buttonColors(containerColor = Color.Black)) {
+
+        Text(stringResource(R.string.roll))
+*/
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text = "Toplam Sayı : ${toplamSayi} " )
+        Text(text = "Toplam Sayı : ${toplamSayi} ")
     }
-
-
 }
+
+
+
+
 
