@@ -30,7 +30,7 @@ fun GreetingPreview5() {
 
 
 @Composable
-fun SonucEkrani(navController: NavController, gelenSonuc:Boolean) {
+fun SonucEkrani(navController: NavController, gelenSonuc:Boolean , sistemAtis:Int ,toplamSayi:Int) {
     Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceEvenly){
 
 
@@ -40,11 +40,21 @@ fun SonucEkrani(navController: NavController, gelenSonuc:Boolean) {
 
         if (gelenSonuc){
             Text(text = "KAZANDINIZ!", fontSize = 36.sp)
+            if (sistemAtis != 0)
+            {
+                Text(text = "Sistemin attığı son zardan gelen sayı: ${sistemAtis} ")
+            }
+            Text(text = "Toplam Sayı : ${toplamSayi}")
             Image(painter = painterResource(id = R.drawable.baseline_emoji_emotions_24),
                 contentDescription = "açıklama",modifier = imageModifier)
         }
         else{
             Text(text = "KAYBETTİN!", fontSize = 36.sp)
+            if (sistemAtis != 0)
+            {
+                Text(text = "Sistemin attığı son zardan gelen sayı: ${sistemAtis} ")
+            }
+            Text(text = "Toplam Sayı : ${toplamSayi}")
             Image(painter = painterResource(id = R.drawable.baseline_mood_bad_24),
                 contentDescription = "açıklama",modifier = imageModifier)
 
@@ -53,4 +63,5 @@ fun SonucEkrani(navController: NavController, gelenSonuc:Boolean) {
 
     }
 }
+
 

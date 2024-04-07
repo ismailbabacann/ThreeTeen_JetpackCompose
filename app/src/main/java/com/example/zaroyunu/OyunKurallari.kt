@@ -58,7 +58,7 @@ fun OyunKurallari(navController: NavController) {
                     "eğer 13'ü geçerseniz kaybedersiniz, 13 ün altında kalırsanız sonraki zar atışını sistem yapar sistem atışı 13'ü geçerse kazanırsınız geçmezse kaybedersiniz. "
         )
         Spacer(modifier = Modifier.height(50.dp))
-        Button(onClick = {navController.navigate("LogicSayfasi")}, colors = ButtonDefaults.buttonColors(containerColor = Color.Black ) ) {
+        Button(onClick = {navController.navigate("Anasayfa")}, colors = ButtonDefaults.buttonColors(containerColor = Color.Black ) ) {
             Text(stringResource(R.string.BackTo))
         }
     }
